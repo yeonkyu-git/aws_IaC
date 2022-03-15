@@ -2,7 +2,7 @@ import boto3
 
 ec2 = boto3.resource('ec2')
 
-# 1. create VPC
+# 1. VPC 생성
 vpc = ec2.create_vpc(CidrBlock='10.0.0.0/16')
 vpc.create_tags(Tags=[
   {"Key": "Name", "Value": "vpc-yeonkyu-02"},
@@ -11,7 +11,7 @@ vpc.create_tags(Tags=[
 vpc.wait_until_available()
 print(vpc.id)
 
-# 2. create then attach internet gateway
+# 2. 인터넷 게이트웨이 생성 후 VPC에 Attach
 ig = ec2.create_internet_gateway()
 ig.create_tags(Tags=[
   {"Key": "Name", "Value": "ig-yeonkyu-02"},
@@ -20,7 +20,7 @@ ig.create_tags(Tags=[
 vpc.attach_internet_gateway(InternetGatewayId=ig.id)
 print(ig.id)
 
-# 3. create public route table and private route table
+# 3. 퍼블릭 라우팅 테이블, 프라이빗 라우팅 테이블 생성
 public_route_table = vpc.create_route_table()
 public_route_table.create_tags(Tags=[
   {"Key": "Name", "Value": "rt-public-yeonkyu-02"},
@@ -43,7 +43,7 @@ except Exception as e:
   print(e)
 
 
-# 4. create subnet
+# 4. 서브넷 생성 (퍼블릭 2개, 프라이빗 2개)
 public_subnet_01 = ec2.create_subnet(
   CidrBlock='10.0.1.0/24', VpcId=vpc.id
 )
@@ -80,7 +80,7 @@ private_route_table.associate_with_subnet(SubnetId=private_subnet_01.id)
 private_route_table.associate_with_subnet(SubnetId=private_subnet_02.id)
 
 
-# Create sec group
+# 보안그룹 생성
 sec_group = ec2.create_security_group(
   GroupName='sec_yeonkyu_1', Description='Sec Group for Public', VpcId=vpc.id
 )
@@ -109,7 +109,7 @@ sec_group.create_tags(Tags=[
   {"Key": "User", "Value": "yeonkyu@lgcns.com"}
 ])
 
-# Create instance
+# EC2 인스턴스 생성
 instances = ec2.create_instances(
   ImageId='ami-04204a8960917fd92', InstanceType='t2.micro', MaxCount=1, MinCount=1, KeyName='yeonkyu-keypair',
   NetworkInterfaces=[
