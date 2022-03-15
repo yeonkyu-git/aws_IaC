@@ -5,8 +5,7 @@ ec2 = boto3.resource('ec2')
 # 1. VPC 생성
 vpc = ec2.create_vpc(CidrBlock='10.0.0.0/16')
 vpc.create_tags(Tags=[
-  {"Key": "Name", "Value": "vpc-yeonkyu-02"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "vpc-yeonkyu-02"}
 ])
 vpc.wait_until_available()
 print(vpc.id)
@@ -14,8 +13,7 @@ print(vpc.id)
 # 2. 인터넷 게이트웨이 생성 후 VPC에 Attach
 ig = ec2.create_internet_gateway()
 ig.create_tags(Tags=[
-  {"Key": "Name", "Value": "ig-yeonkyu-02"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "ig-yeonkyu-02"}
 ])
 vpc.attach_internet_gateway(InternetGatewayId=ig.id)
 print(ig.id)
@@ -23,8 +21,7 @@ print(ig.id)
 # 3. 퍼블릭 라우팅 테이블, 프라이빗 라우팅 테이블 생성
 public_route_table = vpc.create_route_table()
 public_route_table.create_tags(Tags=[
-  {"Key": "Name", "Value": "rt-public-yeonkyu-02"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "rt-public-yeonkyu-02"}
 ])
 publicRoute = public_route_table.create_route(
   DestinationCidrBlock='0.0.0.0/0',
@@ -33,8 +30,7 @@ publicRoute = public_route_table.create_route(
 
 private_route_table = vpc.create_route_table()
 private_route_table.create_tags(Tags=[
-  {"Key": "Name", "Value": "rt-private-yeonkyu-02"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "rt-private-yeonkyu-02"}
 ])
 
 try:
@@ -49,28 +45,24 @@ public_subnet_01 = ec2.create_subnet(
 )
 public_subnet_01.create_tags(Tags=[
   {"Key": "Name", "Value": "public-subnet-yeonkyu-021"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
 ])
 public_subnet_02 = ec2.create_subnet(
   CidrBlock='10.0.2.0/24', VpcId=vpc.id
 )
 public_subnet_02.create_tags(Tags=[
-  {"Key": "Name", "Value": "public-subnet-yeonkyu-022"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "public-subnet-yeonkyu-022"}
 ])
 private_subnet_01 = ec2.create_subnet(
   CidrBlock='10.0.3.0/24', VpcId=vpc.id
 )
 private_subnet_01.create_tags(Tags=[
-  {"Key": "Name", "Value": "private-subnet-yeonkyu-021"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "private-subnet-yeonkyu-021"}
 ])
 private_subnet_02 = ec2.create_subnet(
   CidrBlock='10.0.4.0/24', VpcId=vpc.id
 )
 private_subnet_02.create_tags(Tags=[
-  {"Key": "Name", "Value": "private-subnet-yeonkyu-022"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "private-subnet-yeonkyu-022"}
 ])
 
 # associate the route table with the subnet
@@ -105,8 +97,7 @@ sec_group.authorize_ingress(
   ],
 )
 sec_group.create_tags(Tags=[
-  {"Key": "Name", "Value": "sec-yeonkyu-2"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "sec-yeonkyu-2"}
 ])
 
 # EC2 인스턴스 생성
@@ -122,8 +113,7 @@ instances = ec2.create_instances(
   ]
 )
 instances[0].create_tags(Tags=[
-  {"Key": "Name", "Value": "ec2-yeonkyu-2"},
-  {"Key": "User", "Value": "yeonkyu@lgcns.com"}
+  {"Key": "Name", "Value": "ec2-yeonkyu-2"}
 ])
 instances[0].wait_until_running()
 print(instances[0].id)
